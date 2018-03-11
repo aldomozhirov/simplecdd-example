@@ -1,0 +1,13 @@
+sudo
+xorg
+openbox
+chromium
+lightdm
+curl
+openssh-server
+x11vnc
+apt-transport-https
+ca-certificates
+software-properties-common
+libltdl7
+docker-ce

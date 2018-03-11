@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Copy extras
+
+mount /media/cdrom
+cp -r /media/cdrom0/simple-cdd/extras.tar.gz /opt/
+umount /media/cdrom0
+tar -zxf /opt/extras.tar.gz
+
+# First boot instructions
+
+cat << 'EOF' | sudo tee /etc/systemd/system/rc-local.service > /dev/null
+[Unit]
+Description=/etc/rc.local
+ConditionPathExists=/etc/rc.local
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/rc.local start
+TimeoutSec=0
+StandardOutput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+cat << 'EOF' | sudo tee /etc/rc.local > /dev/null
+#!/bin/bash
+
+FLAG="/var/log/firstboot.log"
+if [ ! -f $FLAG ]; then
+   touch $FLAG
+else
+   echo "Do nothing"
+fi
+
+exit 0
+EOF
+
+exit 0
